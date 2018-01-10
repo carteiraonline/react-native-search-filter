@@ -6,6 +6,26 @@ function flatten (array) {
   ), [])
 }
 
+function removeAccent(newString) {
+  var string = newString;
+	var mapAccent	= {
+		a : /[\xE0-\xE6]/g,
+		e : /[\xE8-\xEB]/g,
+		i : /[\xEC-\xEF]/g,
+		o : /[\xF2-\xF6]/g,
+		u : /[\xF9-\xFC]/g,
+		c : /\xE7/g,
+		n : /\xF1/g
+	};
+
+	for ( var letter in mapAccent ) {
+		var regex = mapAccent[letter];
+		string = string.replace( regex, letter );
+	}
+
+	return string;
+}
+
 export function getValuesForKey (key, item) {
   const keys = key.split('.')
   let results = [item]
@@ -78,6 +98,8 @@ export function createFilter (term, keys, options = {}) {
     if (!options.caseSensitive) {
       term = term.toLowerCase()
     }
+
+    term = removeAccent(term);
 
     const terms = term.split(' ')
 
